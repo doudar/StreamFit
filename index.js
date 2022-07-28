@@ -2119,13 +2119,13 @@
       // callback('./example.fit');
     }
     var xhr = new XMLHttpRequest();
-    xhr.open("GET", "http://smartspin2k.local/wattsslider?value=enable", true);
+    xhr.open("GET", "/wattsslider?value=enable", true);
     xhr.send();
     var xhr2 = new XMLHttpRequest();
-    xhr2.open("GET", "http://smartspin2k.local/cadslider?value=enable", true);
+    xhr2.open("GET", "/cadslider?value=enable", true);
     xhr2.send();
     var xhr3 = new XMLHttpRequest();
-    xhr3.open("GET", "http://smartspin2k.local/hrslider?value=enable", true);
+    xhr3.open("GET", "/hrslider?value=enable", true);
     xhr3.send();
     function streamFit(fitData) {
       let timeDelay = 1000;
@@ -2145,13 +2145,13 @@
           cadence.textContent = `cadence: ${record.cadence}`;
           heart_rate.textContent = `heart rate: ${record.heart_rate}`;
           let xhr = new XMLHttpRequest();
-          xhr.open("GET", "http://smartspin2k.local/wattsslider?value=" + record.power, true);
+          xhr.open("GET", "/wattsslider?value=" + record.power, true);
           xhr.send();
           let xhr2 = new XMLHttpRequest();
-          xhr2.open("GET", "http://smartspin2k.local/cadslider?value=" + record.cadence, true);
+          xhr2.open("GET", "/cadslider?value=" + record.cadence, true);
           xhr2.send();
           let xhr3 = new XMLHttpRequest();
-          xhr3.open("GET", "http://smartspin2k.local/hrslider?value=" + record.heart_rate, true);
+          xhr3.open("GET", "/hrslider?value=" + record.heart_rate, true);
           xhr3.send();
         } else {
           clearInterval(refreshIntervalId);
