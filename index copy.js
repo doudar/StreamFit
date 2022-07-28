@@ -2036,15 +2036,6 @@
     const cadence = document.getElementById('cadence');
     const stopBTN = document.getElementById('stopBTN');
 
-    const progress = document.createElement("progress");
-    const digitalProgress = document.createElement('div');
-    digitalProgress.textContent = '0/0';
-    progress.value = '0';
-
-    cadence.parentNode.insertBefore(progress, cadence.nextSibling);
-    cadence.parentNode.insertBefore(digitalProgress, progress.nextSibling);
-
-
     var content;
 
     const reader = new FileReader();
@@ -2108,7 +2099,6 @@
           //console.log(fitString);
           console.log('parse complete');
           callback(fitData);
-          status.textContent = ' ';
         }
       });
       // });
@@ -2138,23 +2128,17 @@
     xhr3.open("GET", "/hrslider?value=enable", true);
     xhr3.send();
     function streamFit(fitData) {
-      
-
       let timeDelay = 1000;
       let oldTime = fitData.activity.sessions[0].laps[0].records[0].timestamp;
       let recordsLength = fitData.activity.sessions[0].laps[0].records.length;
       let record = fitData.activity.sessions[0].laps[0].records[0];
-      
-
-      progress.setAttribute("max", `${recordsLength}`);
-
       var i = 0;
+
       refreshIntervalId = setInterval(function () {
         if (i < (recordsLength + 1)) {
-          digitalProgress.textContent = `${i}/${recordsLength}`;
-          progress.value = `${i}`;
           record = fitData.activity.sessions[0].laps[0].records[i]
           timeDelay = (record.timestamp - oldTime);
+          sleep(timeDelay);
           oldTime = record.timestamp;
           console.log(record.timestamp);
           power.textContent = `power: ${record.power}`;
