@@ -2036,13 +2036,29 @@
     const cadence = document.getElementById('cadence');
     const stopBTN = document.getElementById('stopBTN');
 
-    const progress = document.createElement("progress");
+    const blankDiv1 = document.createElement('div');
+    const blankDiv2 = document.createElement('div');
+    const progress = document.createElement('input');
     const digitalProgress = document.createElement('div');
+
+    blankDiv1.textContent = '\u200c';
+    blankDiv2.textContent = '\u200c';
+    status.textContent = '\u200c';
     digitalProgress.textContent = '0/0';
     progress.value = '0';
+    progress.setAttribute('class', 'slider1');
+    progress.setAttribute('type', 'range');
+    progress.setAttribute('min', '0');
+
+    var i = 0;
+
+    progress.onclick = function () { updateFromSlider(this.value); };
 
     cadence.parentNode.insertBefore(progress, cadence.nextSibling);
     cadence.parentNode.insertBefore(digitalProgress, progress.nextSibling);
+    heart_rate.parentNode.insertBefore(blankDiv1, heart_rate);
+    progress.parentNode.insertBefore(blankDiv2, progress);
+
 
 
     var content;
@@ -2074,6 +2090,7 @@
         console.log(file);
         console.log(file.name.split('.').pop());
         if (!(file.name.split('.').pop() == "fit")) {
+          status.setAttribute("color", "yellow");
           status.textContent = 'Not a fit file.';
           return;
         } else {
@@ -2083,9 +2100,16 @@
       });
     }
     var refreshIntervalId;
+
     stopBTN.onclick = function () {
       clearInterval(refreshIntervalId);
-      console.log('Stop Button Pressed');
+      status.setAttribute("style", "color:yellow");
+      status.textContent = 'Stop Button Pressed';
+      heart_rate.textContent = 'heart rate:';
+      power.textContent = 'power:';
+      cadence.textContent = 'cadence:';
+      enableSliders(false);
+      i = 0;
     };
 
     function readFit(fitFile, callback) {
@@ -2098,57 +2122,50 @@
         elapsedRecordField: false,
         mode: 'both',
       });
-      //console.log(fitFile);
       fitParser.parse(fitFile, function (error, fitData) {
         if (error) {
           console.log('error:');
           console.log(error);
         } else {
           let fitString = JSON.stringify(fitData);
-          //console.log(fitString);
           console.log('parse complete');
           callback(fitData);
-          status.textContent = ' ';
+          status.textContent = '\u200c';
         }
       });
-      // });
     }
 
-    function sleep(milliseconds) {
-      const date = Date.now();
-      let currentDate = null;
-      do {
-        currentDate = Date.now();
-      } while (currentDate - date < milliseconds);
+    function updateFromSlider(x) {
+      i = x;
     }
 
-    function printFit(fitData) {
-      let fitString = JSON.stringify(fitData);
-      //console.log(fitString);
-      console.log("Print Fit has run");
-      // callback('./example.fit');
+    function enableSliders(enable) {
+      let value = 'disable';
+      if (enable == true) {
+        value = 'enable';
+      }
+
+      var xhr = new XMLHttpRequest();
+      xhr.open("GET", `/wattsslider?value=${value}`, true);
+      xhr.send();
+      var xhr2 = new XMLHttpRequest();
+      xhr2.open("GET", `/cadslider?value=${value}`, true);
+      xhr2.send();
+      var xhr3 = new XMLHttpRequest();
+      xhr3.open("GET", `/hrslider?value=${value}`, true);
+      xhr3.send();
     }
-    var xhr = new XMLHttpRequest();
-    xhr.open("GET", "/wattsslider?value=enable", true);
-    xhr.send();
-    var xhr2 = new XMLHttpRequest();
-    xhr2.open("GET", "/cadslider?value=enable", true);
-    xhr2.send();
-    var xhr3 = new XMLHttpRequest();
-    xhr3.open("GET", "/hrslider?value=enable", true);
-    xhr3.send();
+
     function streamFit(fitData) {
-      
 
+      enableSliders(true);
       let timeDelay = 1000;
       let oldTime = fitData.activity.sessions[0].laps[0].records[0].timestamp;
       let recordsLength = fitData.activity.sessions[0].laps[0].records.length;
       let record = fitData.activity.sessions[0].laps[0].records[0];
-      
 
       progress.setAttribute("max", `${recordsLength}`);
 
-      var i = 0;
       refreshIntervalId = setInterval(function () {
         if (i < (recordsLength + 1)) {
           digitalProgress.textContent = `${i}/${recordsLength}`;
@@ -2176,14 +2193,6 @@
       }, timeDelay);
       console.log("Stream Fit has run");
     }
-
-    //readFit('./6pm_Tuesday_Blur.fit', streamFit);
-    //streamFit();
-    //printFit(readFit);
-    //console.log("end of program!");
-
-
-
 
     ///////////////////// End Normal Script //////////////////////
 
