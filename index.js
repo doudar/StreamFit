@@ -2053,7 +2053,7 @@
     progress.setAttribute('class', 'slider1');
     progress.setAttribute('type', 'range');
     progress.setAttribute('min', '0');
-    simulateCheckboxText.textContent = 'Simulate watts using function:';
+    simulateCheckboxText.textContent = 'Simulate watts using incline feedback:';
     simulateCheckbox.setAttribute('type', 'checkbox');
 
     cadence.parentNode.insertBefore(progress, cadence.nextSibling);
