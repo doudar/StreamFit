@@ -2184,7 +2184,7 @@
           console.log(record.timestamp);
           if(simulateCheckbox.checked){
             requestConfigValues();
-            powerOutput = 0.00002*currentIncline**2+0.0122*currentIncline+16.8039;
+            powerOutput = 0.00001*currentIncline**2+0.0092*currentIncline+16.8039;
             powerOutput = Math.round(powerOutput*(record.cadence/90));
             power.textContent = `power: ${powerOutput} incline was: ${currentIncline}`;
         }else{
