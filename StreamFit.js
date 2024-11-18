@@ -29,12 +29,10 @@ progress.setAttribute('min', '0');
 simulateCheckboxText.textContent = 'Simulate watts using incline feedback:';
 simulateCheckbox.setAttribute('type', 'checkbox');
 
-cadence.parentNode.insertBefore(progress, cadence.nextSibling);
-cadence.parentNode.insertBefore(digitalProgress, progress.nextSibling);
-heart_rate.parentNode.insertBefore(blankDiv1, heart_rate);
-progress.parentNode.insertAfter(blankDiv2, progress);
+stopBTN.parentNode.insertBefore(progress, stopBTN);
+stopBTN.parentNode.insertBefore(digitalProgress, stopBTN);
 stopBTN.parentNode.insertBefore(blankDiv3, stopBTN.nextSibling);
-blankDiv3.parentNode.insertBefore(simulateCheckboxText, blankDiv3.nextSibling);
+stopBTN.parentNode.insertBefore(simulateCheckboxText, blankDiv3.nextSibling);
 simulateCheckboxText.parentNode.insertBefore(simulateCheckbox, simulateCheckboxText.nextSibling);
 
 progress.onclick = function () { updateFromSlider(this.value); };
